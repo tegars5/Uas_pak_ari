@@ -6,6 +6,7 @@ class CovidData {
   final String kota;
   final String zona;
   String documentId;
+  final String nama;
 
   CovidData({
     required this.tanggal,
@@ -15,6 +16,7 @@ class CovidData {
     required this.kota,
     required this.zona,
     required this.documentId,
+    required this.nama,
   });
 
   factory CovidData.fromFirestore(Map<String, dynamic> data) {
@@ -25,7 +27,8 @@ class CovidData {
       meninggal: data['meninggal'],
       kota: data['kota'],
       zona: data['zona'],
-      documentId: '',
+      documentId: data['documentId'],
+      nama: data['nama'],
     );
   }
 
@@ -37,6 +40,8 @@ class CovidData {
       'meninggal': meninggal,
       'kota': kota,
       'zona': zona,
+      'documentId': documentId,
+      'nama': nama,
     };
   }
 }

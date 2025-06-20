@@ -12,6 +12,7 @@ class _AddDataScreenState extends State<AddDataScreen> {
   final CovidController _covidController = CovidController();
 
   final TextEditingController tanggalController = TextEditingController();
+  final TextEditingController namaController = TextEditingController();
   final TextEditingController totalKasusController = TextEditingController();
   final TextEditingController sembuhController = TextEditingController();
   final TextEditingController meninggalController = TextEditingController();
@@ -27,10 +28,20 @@ class _AddDataScreenState extends State<AddDataScreen> {
         meninggal: int.parse(meninggalController.text),
         kota: kotaController.text,
         zona: zonaController.text,
-        documentId: '',
+        documentId: "",
+        nama: namaController.text,
       );
-      _covidController.addCovidData(covidData);
-      Navigator.pop(context);
+
+      _covidController
+          .addCovidData(covidData)
+          .then((_) {
+            Navigator.pop(context);
+          })
+          .catchError((error) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text('Error: $error')));
+          });
     }
   }
 
@@ -83,6 +94,20 @@ class _AddDataScreenState extends State<AddDataScreen> {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Total Kasus tidak boleh kosong';
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: 12),
+                TextFormField(
+                  controller: namaController,
+                  decoration: InputDecoration(
+                    labelText: 'Nama ',
+                    border: OutlineInputBorder(),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Nama tidak boleh kosong';
                     }
                     return null;
                   },

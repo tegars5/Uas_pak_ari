@@ -1,6 +1,7 @@
+import 'package:covid_banten_app/models/covid_model.dart';
 import 'package:flutter/material.dart';
 import 'package:covid_banten_app/controllers/covid_controller.dart';
-import 'package:covid_banten_app/models/covid_model.dart';
+import 'package:covid_banten_app/views/profile_screen.dart';
 import 'package:covid_banten_app/views/edit_data_screen.dart';
 import 'package:covid_banten_app/views/add_data_screen.dart';
 
@@ -11,9 +12,22 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Data Covid Banten', style: TextStyle(color: Colors.white)),
+        title: Text(
+          'Data Covid Banten',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
         backgroundColor: Colors.blue,
         centerTitle: true,
+        leading: IconButton(
+          icon: Icon(Icons.account_circle, color: Colors.white),
+          tooltip: 'Profile',
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ProfileScreen()),
+            );
+          },
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -28,65 +42,73 @@ class HomeScreen extends StatelessWidget {
             }
 
             var data = snapshot.data!;
-            return ListView.builder(
-              itemCount: data.length,
-              itemBuilder: (context, index) {
-                var covidData = data[index];
-                return Card(
-                  margin: EdgeInsets.symmetric(vertical: 8),
-                  elevation: 5,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: ListTile(
-                    contentPadding: EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 10,
-                    ),
-                    title: Text(
-                      'Tanggal: ${covidData.tanggal}',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Kasus Positif: ${covidData.totalKasus}'),
-                        Text('Zona: ${covidData.zona}'),
-                        Text('Kota: ${covidData.kota}'),
-                        Text('Sembuh: ${covidData.sembuh}'),
-                        Text('Meninggal: ${covidData.meninggal}'),
-                      ],
-                    ),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          icon: Icon(Icons.edit, color: Colors.blue),
-                          tooltip: 'Edit Data',
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder:
-                                    (context) =>
-                                        EditDataScreen(covidData: covidData),
-                              ),
-                            );
-                          },
-                        ),
 
-                        IconButton(
-                          icon: Icon(Icons.delete, color: Colors.red),
-                          tooltip: 'Hapus Data',
-                          onPressed: () {
-                            _showDeleteDialog(context, covidData);
-                          },
+            return Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: data.length,
+                    itemBuilder: (context, index) {
+                      var covidData = data[index];
+                      return Card(
+                        margin: EdgeInsets.symmetric(vertical: 8),
+                        elevation: 5,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
                         ),
-                      ],
-                    ),
+                        child: ListTile(
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 10,
+                          ),
+                          title: Text(
+                            'Tanggal: ${covidData.tanggal}',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Kasus Positif: ${covidData.totalKasus}'),
+                              Text('Zona: ${covidData.zona}'),
+                              Text('Kota: ${covidData.kota}'),
+                              Text('Sembuh: ${covidData.sembuh}'),
+                              Text('Meninggal: ${covidData.meninggal}'),
+                            ],
+                          ),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                icon: Icon(Icons.edit, color: Colors.blue),
+                                tooltip: 'Edit Data',
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder:
+                                          (context) => EditDataScreen(
+                                            covidData: covidData,
+                                          ),
+                                    ),
+                                  );
+                                },
+                              ),
+
+                              IconButton(
+                                icon: Icon(Icons.delete, color: Colors.red),
+                                tooltip: 'Hapus Data',
+                                onPressed: () {
+                                  _showDeleteDialog(context, covidData);
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                );
-              },
+                ),
+              ],
             );
           },
         ),

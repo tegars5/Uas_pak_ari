@@ -16,6 +16,7 @@ class _EditDataScreenState extends State<EditDataScreen> {
   final CovidController _covidController = CovidController();
 
   final TextEditingController tanggalController = TextEditingController();
+  final TextEditingController namaController = TextEditingController();
   final TextEditingController totalKasusController = TextEditingController();
   final TextEditingController sembuhController = TextEditingController();
   final TextEditingController meninggalController = TextEditingController();
@@ -32,6 +33,7 @@ class _EditDataScreenState extends State<EditDataScreen> {
     meninggalController.text = widget.covidData.meninggal.toString();
     kotaController.text = widget.covidData.kota;
     zonaController.text = widget.covidData.zona;
+    namaController.text = widget.covidData.nama;
   }
 
   void _updateData() {
@@ -43,9 +45,10 @@ class _EditDataScreenState extends State<EditDataScreen> {
         meninggal: int.parse(meninggalController.text),
         kota: kotaController.text,
         zona: zonaController.text,
-        documentId: '',
+        documentId: widget.covidData.documentId,
+        nama: namaController.text,
       );
-      _covidController.addCovidData(updatedData);
+      _covidController.updateCovidData(updatedData);
       Navigator.pop(context);
     }
   }
@@ -100,6 +103,21 @@ class _EditDataScreenState extends State<EditDataScreen> {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Total Kasus tidak boleh kosong';
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: 12),
+                TextFormField(
+                  controller: namaController,
+                  decoration: InputDecoration(
+                    labelText: 'Nama',
+                    border: OutlineInputBorder(),
+                  ),
+                  keyboardType: TextInputType.text,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Nama tidak boleh kosong';
                     }
                     return null;
                   },

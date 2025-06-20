@@ -30,5 +30,15 @@ class CovidController {
     }
   }
 
-  void updateCovidData(String tanggal, CovidData updatedData) {}
+  Future<void> updateCovidData(CovidData updatedData) async {
+    try {
+      await _firestore
+          .collection('covid_data')
+          .doc(updatedData.documentId)
+          .update(updatedData.toMap());
+      print("Data berhasil diperbarui.");
+    } catch (e) {
+      print("Error memperbarui data: $e");
+    }
+  }
 }
